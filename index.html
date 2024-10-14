@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form to Google Slides</title>
+</head>
+<body>
+    <h1>Input Data untuk Google Slides</h1>
+    <form id="dataForm">
+        <label for="title">Judul:</label>
+        <input type="text" id="title" required><br><br>
+
+        <label for="content">Konten:</label>
+        <textarea id="content" rows="4" cols="50" required></textarea><br><br>
+
+        <button type="submit">Kirim ke Google Slides</button>
+    </form>
+
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman form
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+
+            // Kirim data ke Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbwTn3X8V1IeJ4-YK04m-w4BMVkn5GPQSCmN0GG_SZVmk8yn5Zt3vm6yTYfitWTfm0HW/exec', {
+                method: 'POST',
+                body: JSON.stringify({ title, content }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            })
+            .then(response => response.json())
+			.then(() => {
+				const blob = new Blob([data.pdfUrl], { type: 'application/pdf' });
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = 'presentation.pdf';
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+			})
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
